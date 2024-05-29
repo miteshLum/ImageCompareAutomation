@@ -137,7 +137,7 @@ export async function st(link) {
 
 export async function getAllModules(link) {
   // const suiteURL = link + "data/suites.json";
-  const moduleData = await axios.get("http://localhost:8080/allmodules").then(async (response) => {
+  const moduleData = await axios.get("https://image-compare-automation-server.vercel.app/allmodules").then(async (response) => {
     const allModules = response.data;
     console.log("Response => ", response);
     return allModules;
