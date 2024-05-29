@@ -13,7 +13,6 @@ app.get("/allmodules", async function (req, res) {
     const allModules = response.data.children;
     return allModules;
   });
-  //return moduleData;
   res.send(moduleData);
 });
 
