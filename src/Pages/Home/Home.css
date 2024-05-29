@@ -1,0 +1,13 @@
+.modules-container {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+.loader-style {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
