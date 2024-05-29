@@ -177,27 +177,20 @@ export async function getAttList(uidArray, link) {
 }
 
 export async function readAllScenario(uid, link) {
-  csvWriterValueArray = [];
-  for (let i = 0; i < uid.length; i++) {
-    let attURL = `${link}data/test-cases/${uid[i]}.json`;
-    try {
-      await axios.get(attURL).then(async (response) => {
-        const jsonVal = response.data;
-        let scenarioName = jsonVal.name.toString();
-        scenarioName = scenarioName.includes("@") == true ? scenarioName.split("@")[0].trim() : scenarioName.trim();
-        const featureName = jsonVal.fullName.toString().split(":.")[0];
-        const testStatus = jsonVal.status;
-        if (testStatus === "failed") {
-          const testStage = jsonVal.testStage;
-          await getStepsattachment(testStage, featureName, scenarioName);
-        }
-      });
-    } catch (error) {
+  // csvWriterValueArray = [];
+
+  const response = await axios
+    .post("https://image-compare-automation-server.vercel.app/readAllScenarios", {
+      link: link,
+      uid: uid,
+    })
+    .then(function (response) {
+      console.log("Reponse Check ===> ", response);
+    })
+    .catch(function (error) {
       console.log(error);
-      // return false;
-    }
-  }
-  return csvWriterValueArray;
+    });
+  // return csvWriterValueArray;
 }
 
 async function getStepsattachment(testStageObj, featureName, scenarioName) {
