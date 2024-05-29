@@ -190,11 +190,13 @@ export async function readAllScenario(uid, link) {
     )
     .then(function (response) {
       console.log("Reponse Check ===> ", response);
+      return response.data;
     })
     .catch(function (error) {
       console.log(error);
     });
   // return csvWriterValueArray;
+  return response;
 }
 
 async function getStepsattachment(testStageObj, featureName, scenarioName) {

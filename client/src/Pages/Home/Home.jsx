@@ -59,12 +59,12 @@ function Home() {
         const failedCasesUID = failedCases.map((item) => item.uid);
         const result = await readAllScenario(failedCasesUID, link);
 
-        // allModuleImageFailures.push({ ...arr[i], allImageFailures: result });
+        allModuleImageFailures.push({ ...arr[i], allImageFailures: result });
       }
-      // dispatch(addModules(allModuleImageFailures));
-      // setModuleList(allModuleImageFailures);
-      // setShowDownload(true);
-      // setLoading(false);
+      dispatch(addModules(allModuleImageFailures));
+      setModuleList(allModuleImageFailures);
+      setShowDownload(true);
+      setLoading(false);
     } else {
       alert("Please enter allure link");
       setLoading(false);
