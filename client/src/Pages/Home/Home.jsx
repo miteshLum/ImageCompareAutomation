@@ -51,19 +51,19 @@ function Home() {
     setLoading(true);
     if (link !== "") {
       const arr = await getAllModules(link);
-
+      console.log("All Arr => ", arr);
       const allModuleImageFailures = [];
-      for (let i = 0; i < arr.length; i++) {
-        const allCases = arr[i].children;
-        const failedCases = allCases.filter((val) => val.status === "failed");
-        const failedCasesUID = failedCases.map((item) => item.uid);
-        const result = await readAllScenario(failedCasesUID, link);
-        allModuleImageFailures.push({ ...arr[i], allImageFailures: result });
-      }
-      dispatch(addModules(allModuleImageFailures));
-      setModuleList(allModuleImageFailures);
-      setShowDownload(true);
-      setLoading(false);
+      // for (let i = 0; i < arr.length; i++) {
+      //   const allCases = arr[i].children;
+      //   const failedCases = allCases.filter((val) => val.status === "failed");
+      //   const failedCasesUID = failedCases.map((item) => item.uid);
+      //   const result = await readAllScenario(failedCasesUID, link);
+      //   allModuleImageFailures.push({ ...arr[i], allImageFailures: result });
+      // }
+      // dispatch(addModules(allModuleImageFailures));
+      // setModuleList(allModuleImageFailures);
+      // setShowDownload(true);
+      // setLoading(false);
     } else {
       alert("Please enter allure link");
       setLoading(false);

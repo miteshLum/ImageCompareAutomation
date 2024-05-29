@@ -136,9 +136,10 @@ export async function st(link) {
 }
 
 export async function getAllModules(link) {
-  const suiteURL = link + "data/suites.json";
-  const moduleData = await axios.get(suiteURL).then(async (response) => {
-    const allModules = response.data.children;
+  // const suiteURL = link + "data/suites.json";
+  const moduleData = await axios.get("http://localhost:8080/allmodules").then(async (response) => {
+    const allModules = response.data;
+    console.log("Response => ", response);
     return allModules;
   });
   return moduleData;
