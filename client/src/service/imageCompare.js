@@ -180,10 +180,14 @@ export async function readAllScenario(uid, link) {
   // csvWriterValueArray = [];
 
   const response = await axios
-    .post("https://image-compare-automation-server.vercel.app/readAllScenarios", {
-      link: link,
-      uid: uid,
-    })
+    .post(
+      "https://image-compare-automation-server.vercel.app/readAllScenarios",
+      {
+        link: link,
+        uid: uid,
+      },
+      { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Cache-Control": "no-cache", "Content-Type": "application/x-www-form-urlencoded" } }
+    )
     .then(function (response) {
       console.log("Reponse Check ===> ", response);
     })
