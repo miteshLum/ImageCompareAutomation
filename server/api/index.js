@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const axios = require("axios");
 
 app.use(express.static("public"));
-
+app.use(cors());
 app.get("/", function (req, res) {
   res.send({ data: "abc" });
 });
