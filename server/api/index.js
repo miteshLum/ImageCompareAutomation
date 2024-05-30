@@ -16,6 +16,7 @@ app.get("/", function (req, res) {
 });
 var csvWriterValueArray = [];
 app.post("/allmodules", async function (req, res) {
+  let link = req.body.link;
   const suiteURL = `${link}/data/suites.json`;
   const moduleData = await axios.get(suiteURL).then(async (response) => {
     const allModules = response.data.children;
