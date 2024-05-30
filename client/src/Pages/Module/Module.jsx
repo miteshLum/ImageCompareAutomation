@@ -22,28 +22,35 @@ function CompareImageComponent(props) {
   }
 
   return (
-    <div style={{ display: "flex", width: "100%", marginTop: 50 }}>
-      <div className="img-container" style={{ width: "33%" }}>
-        {/* <a href="">{index}</a> */}
-        <div className="filename-style">{item.source.baseFileName}</div>
-        <div className="container-image-view">
-          <div className="manage-image-style">
-            <input type="checkbox" defaultChecked={item.IsExpected === "True" ? true : false} onChange={(e) => handleExpectedImage(e, index)} />
-            <button onClick={() => handleClick(item, index)}>{index}</button>
+    <div style={{ width: "100%", marginBottom: 10 }}>
+      <hr style={{ margin: 25 }} />
+      <span className="scenario-name-label">
+        {" "}
+        Scenario Name: <b>{item.ScenarioName}</b>{" "}
+      </span>
+      <div style={{ display: "flex", width: "100%", marginTop: 15 }}>
+        <div className="img-container" style={{ width: "33%" }}>
+          {/* <a href="">{index}</a> */}
+          <div className="filename-style">{item.source.baseFileName}</div>
+          <div className="container-image-view">
+            <div className="manage-image-style">
+              <input type="checkbox" defaultChecked={item.IsExpected === "True" ? true : false} onChange={(e) => handleExpectedImage(e, index)} />
+              <button onClick={() => handleClick(item, index)}>{index}</button>
+            </div>
+            <img style={{ height: 300, width: "90%" }} className="image1" src={`${link}data/attachments/${item.source.base}`} />
           </div>
-          <img style={{ height: 300, width: "90%" }} className="image1" src={`${link}data/attachments/${item.source.base}`} />
+          {/* <span>Tooltip text</span> */}
         </div>
-        {/* <span>Tooltip text</span> */}
-      </div>
-      <div className="img-container1" style={{ width: "33%" }}>
-        <div className="filename-style">{item.source.actualFileName}</div>
-        <img style={{ height: 300, width: "90%" }} className="image2" src={`${link}data/attachments/${item.source.actual}`} />
-        {/* <span>Tooltip text</span> */}
-      </div>
-      <div className="img-container2" style={{ width: "33%" }}>
-        <div className="filename-style">{item.source.diffFileName}</div>
-        <img style={{ height: 300, width: "90%" }} className="image2" src={`${link}data/attachments/${item.source.diff}`} />
-        {/* <span>Tooltip text</span> */}
+        <div className="img-container1" style={{ width: "33%" }}>
+          <div className="filename-style">{item.source.actualFileName}</div>
+          <img style={{ height: 300, width: "90%" }} className="image2" src={`${link}data/attachments/${item.source.actual}`} />
+          {/* <span>Tooltip text</span> */}
+        </div>
+        <div className="img-container2" style={{ width: "33%" }}>
+          <div className="filename-style">{item.source.diffFileName}</div>
+          <img style={{ height: 300, width: "90%" }} className="image2" src={`${link}data/attachments/${item.source.diff}`} />
+          {/* <span>Tooltip text</span> */}
+        </div>
       </div>
     </div>
   );
@@ -51,16 +58,28 @@ function CompareImageComponent(props) {
 
 function Module() {
   let location = useLocation();
+  let navigate = useNavigate();
   const { currentModule } = useSelector((state) => state.modules);
   const [compareList, setCompareList] = useState([]);
   useEffect(() => {
-    console.log("Render Location => ", currentModule);
     setCompareList(currentModule.allImageFailures);
   }, []);
 
+  const goBack = () => {
+    navigate(`/`);
+  };
+
   return (
     <div>
-      <div className="main-text">{location.state.item.name}</div>
+      <div style={{ width: "100%", display: "flex", flexDirection: "row", marginTop: 30 }}>
+        <div style={{ width: "20%", marginLeft: 30 }}>
+          <button onClick={goBack}>Home</button>
+        </div>
+        <div className="main-text" style={{ width: "60%" }}>
+          <span>{location.state.item.name}</span>
+        </div>
+        <div style={{ width: "20%" }}></div>
+      </div>
       {compareList?.length > 0 && (
         <div>
           {compareList.map((item, index) => {

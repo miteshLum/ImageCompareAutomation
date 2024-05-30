@@ -22,7 +22,6 @@ function Home() {
   const [moduleList, setModuleList] = useState([]);
   const [showDownload, setShowDownload] = useState(false);
   let [loading, setLoading] = useState(false);
-  let [color, setColor] = useState("#36d7b7");
   const { link, allModules } = useSelector((state) => state.modules);
 
   useEffect(() => {
@@ -38,28 +37,28 @@ function Home() {
   }, []);
 
   const onLink = (e) => {
-    console.log("Link =>", e.target.value, e.target.value.split(".netlify.app"));
     let netlifyLink = e.target.value.split(".netlify.app");
     let fullLink = netlifyLink[0] + ".netlify.app/";
-    console.log("Full Link => ", fullLink);
     setLinkAdd(e.target.value);
     dispatch(setAllureLink(fullLink));
   };
 
   const onClick = async () => {
-    // console.log("Button Click", link);
     setLoading(true);
+    setModuleList([]);
     if (link !== "") {
       const arr = await getAllModules(link);
-      console.log("All Arr => ", arr);
       const allModuleImageFailures = [];
       for (let i = 0; i < arr.length; i++) {
         const allCases = arr[i].children;
         const failedCases = allCases.filter((val) => val.status === "failed");
         const failedCasesUID = failedCases.map((item) => item.uid);
-        const result = await readAllScenario(failedCasesUID, link);
-
-        allModuleImageFailures.push({ ...arr[i], allImageFailures: result });
+        if (failedCasesUID.length !== 0) {
+          const result = await readAllScenario(failedCasesUID, link);
+          if (result.length !== 0) {
+            allModuleImageFailures.push({ ...arr[i], allImageFailures: result });
+          }
+        }
       }
       dispatch(addModules(allModuleImageFailures));
       setModuleList(allModuleImageFailures);
@@ -73,7 +72,6 @@ function Home() {
 
   const onDownloadClick = () => {
     let csvWriterValueArray = [];
-    // console.log("All Modules => ", allModules);
     for (let i = 0; i < allModules.length; i++) {
       for (let j = 0; j < allModules[i].allImageFailures.length; j++) {
         const { FileType, FeatureName, ScenarioName, FileName, IsExpected } = allModules[i].allImageFailures[j];
@@ -92,7 +90,6 @@ function Home() {
   };
 
   function handleClick(item) {
-    console.log("ITEM ===> ", item);
     dispatch(addCurrentModule(item));
     navigate(`/module/${item.uid}`, { state: { item: item } });
   }
@@ -104,7 +101,7 @@ function Home() {
       </div>
 
       <div className="loader-style">
-        <ClipLoader color={color} loading={loading} size={50} aria-label="Loading Spinner" data-testid="loader" />
+        <ClipLoader color={"#36d7b7"} loading={loading} size={50} aria-label="Loading Spinner" data-testid="loader" />
       </div>
       <div className="modules-container">
         {moduleList.length > 0 &&
@@ -113,7 +110,7 @@ function Home() {
               <button onClick={() => handleClick(item)}>{item.name.substring(0, item.name.length - 1)}</button>
             </div>
           ))}
-        {showDownload && (
+        {showDownload && moduleList.length > 0 && (
           <CSVLink data={onDownloadClick()} filename={"allureMapCSV.csv"} headers={headers}>
             Download CSV File
           </CSVLink>
