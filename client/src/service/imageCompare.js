@@ -137,11 +137,19 @@ export async function st(link) {
 
 export async function getAllModules(link) {
   // const suiteURL = link + "data/suites.json";
-  const moduleData = await axios.get("https://image-compare-automation-server.vercel.app/allmodules").then(async (response) => {
-    const allModules = response.data;
-    console.log("Response => ", response);
-    return allModules;
-  });
+  const moduleData = await axios
+    .post(
+      "https://image-compare-automation-server.vercel.app/allmodules",
+      {
+        link: link,
+      },
+      { headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Cache-Control": "no-cache", "Content-Type": "application/x-www-form-urlencoded" } }
+    )
+    .then(async (response) => {
+      const allModules = response.data;
+      console.log("Response => ", response);
+      return allModules;
+    });
   return moduleData;
 }
 
