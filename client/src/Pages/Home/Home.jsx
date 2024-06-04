@@ -60,9 +60,13 @@ function Home() {
           }
         }
       }
-      dispatch(addModules(allModuleImageFailures));
-      setModuleList(allModuleImageFailures);
-      setShowDownload(true);
+      if (allModuleImageFailures.some((val) => val.allImageFailures.length !== 0)) {
+        dispatch(addModules(allModuleImageFailures));
+        setModuleList(allModuleImageFailures);
+        setShowDownload(true);
+      } else {
+        alert("No image failure found");
+      }
       setLoading(false);
     } else {
       alert("Please enter allure link");
@@ -107,7 +111,9 @@ function Home() {
         {moduleList.length > 0 &&
           moduleList?.map((item, index) => (
             <div className="module">
-              <button onClick={() => handleClick(item)}>{item.name.substring(0, item.name.length - 1)}</button>
+              <button onClick={() => handleClick(item)}>
+                {item.name.substring(0, item.name.length - 1)} {`(${item.allImageFailures.length})`}
+              </button>
             </div>
           ))}
         {showDownload && moduleList.length > 0 && (
