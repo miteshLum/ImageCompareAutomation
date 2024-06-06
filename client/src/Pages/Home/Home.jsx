@@ -117,7 +117,7 @@ function Home() {
             </div>
           ))}
         {showDownload && moduleList.length > 0 && (
-          <CSVLink data={onDownloadClick()} filename={"allureMapCSV.csv"} headers={headers}>
+          <CSVLink data={onDownloadClick()} filename={"allureMapCSV.csv"} headers={headers} enclosingCharacter="">
             Download CSV File
           </CSVLink>
         )}

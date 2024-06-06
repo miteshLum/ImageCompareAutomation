@@ -65,7 +65,7 @@ function Module() {
   const [compareList, setCompareList] = useState([]);
   useEffect(() => {
     setCompareList(currentModule.allImageFailures);
-    const findIsExpected = currentModule.allImageFailures.some((item) => item.IsExpected === "False");
+    const findIsExpected = currentModule?.allImageFailures?.some((item) => item.IsExpected === "False");
     if (!findIsExpected) {
       setSelectAll(true);
     } else {
