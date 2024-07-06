@@ -6,6 +6,7 @@ const moduleSlice = createSlice({
     link: "",
     currentModule: {},
     allModules: {},
+    allFailures: [],
   },
   reducers: {
     addModules(state, action) {
@@ -31,9 +32,12 @@ const moduleSlice = createSlice({
         allModules: updateAllModules,
       };
     },
+    addAllFailures(state, action) {
+      return { ...state, allFailures: action.payload };
+    },
     clearState(state, action) {},
   },
 });
 
-export const { addModules, addCurrentModule, setAllureLink, setBothCurrentAndAllModules, clearState } = moduleSlice.actions;
+export const { addModules, addCurrentModule, setAllureLink, setBothCurrentAndAllModules, addAllFailures, clearState } = moduleSlice.actions;
 export default moduleSlice.reducer;

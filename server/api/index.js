@@ -29,6 +29,7 @@ app.post("/readAllScenarios", async function (req, res) {
   let link = req.body.link;
   let uid = req.body.uid;
   csvWriterValueArray = [];
+  let allFailures = [];
   for (let i = 0; i < uid.length; i++) {
     let attURL = `${link}data/test-cases/${uid[i]}.json`;
     try {
@@ -42,14 +43,19 @@ app.post("/readAllScenarios", async function (req, res) {
           const testStage = jsonVal.testStage;
           await getStepsattachment(testStage, featureName, scenarioName);
         }
+        let failureObj = {
+          FeatureName: featureName,
+          ScenarioName: scenarioName,
+          StatusMessage: jsonVal.statusMessage,
+        };
+        allFailures.push(failureObj);
       });
     } catch (error) {
       console.log(error);
       // return false;
     }
   }
-
-  res.send(csvWriterValueArray);
+  res.send({ csvWriterValueArray, allFailures });
 });
 
 async function getStepsattachment(testStageObj, featureName, scenarioName) {

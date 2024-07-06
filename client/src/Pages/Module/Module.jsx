@@ -37,18 +37,18 @@ function CompareImageComponent(props) {
               <input type="checkbox" checked={item.IsExpected === "True" ? true : false} onChange={(e) => handleExpectedImage(e, index)} />
               <button onClick={() => handleClick(item, index)}>{index}</button>
             </div>
-            <img style={{ height: 300, width: "90%" }} className="image1" src={`${link}data/attachments/${item.source.base}`} />
+            <img style={{ height: 300, width: "90%" }} className="image1" src={`${link}data/attachments/${item.source.base}`} alt="" />
           </div>
           {/* <span>Tooltip text</span> */}
         </div>
         <div className="img-container1" style={{ width: "33%" }}>
           <div className="filename-style">{item.source.actualFileName}</div>
-          <img style={{ height: 300, width: "90%" }} className="image2" src={`${link}data/attachments/${item.source.actual}`} />
+          <img style={{ height: 300, width: "90%" }} className="image2" src={`${link}data/attachments/${item.source.actual}`} alt="" />
           {/* <span>Tooltip text</span> */}
         </div>
         <div className="img-container2" style={{ width: "33%" }}>
           <div className="filename-style">{item.source.diffFileName}</div>
-          <img style={{ height: 300, width: "90%" }} className="image2" src={`${link}data/attachments/${item.source.diff}`} />
+          <img style={{ height: 300, width: "90%" }} className="image2" src={`${link}data/attachments/${item.source.diff}`} alt="" />
           {/* <span>Tooltip text</span> */}
         </div>
       </div>

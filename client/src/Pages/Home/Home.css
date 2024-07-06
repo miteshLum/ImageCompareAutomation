@@ -11,3 +11,9 @@
   justify-content: center;
   margin-top: 50px;
 }
+.downloadExcelStyle {
+  color: #0000ee;
+  text-decoration: underline;
+  margin-left: 20px;
+  cursor: pointer;
+}

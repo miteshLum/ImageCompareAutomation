@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import { getAllModules, readAllScenario } from "../../service/imageCompare";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addCurrentModule, addModules, setAllureLink } from "../../store/slices/ModuleSlice";
+import { addCurrentModule, addModules, setAllureLink, addAllFailures } from "../../store/slices/ModuleSlice";
 import { CSVLink } from "react-csv";
 import ClipLoader from "react-spinners/ClipLoader";
+import * as XLSX from "xlsx";
 
 const headers = [
   { label: "FileType", key: "FileType" },
@@ -22,7 +23,7 @@ function Home() {
   const [moduleList, setModuleList] = useState([]);
   const [showDownload, setShowDownload] = useState(false);
   let [loading, setLoading] = useState(false);
-  const { link, allModules } = useSelector((state) => state.modules);
+  const { link, allModules, allFailures } = useSelector((state) => state.modules);
 
   useEffect(() => {
     if (link !== "" && allModules.length > 0) {
@@ -49,17 +50,20 @@ function Home() {
     if (link !== "") {
       const arr = await getAllModules(link);
       const allModuleImageFailures = [];
+      const allFailureData = [];
       for (let i = 0; i < arr.length; i++) {
         const allCases = arr[i].children;
         const failedCases = allCases.filter((val) => val.status === "failed");
         const failedCasesUID = failedCases.map((item) => item.uid);
         if (failedCasesUID.length !== 0) {
           const result = await readAllScenario(failedCasesUID, link);
-          if (result.length !== 0) {
-            allModuleImageFailures.push({ ...arr[i], allImageFailures: result });
+          allFailureData.push({ allFailures: result.allFailures });
+          if (result.csvWriterValueArray.length !== 0) {
+            allModuleImageFailures.push({ ...arr[i], allImageFailures: result.csvWriterValueArray });
           }
         }
       }
+      dispatch(addAllFailures(allFailureData));
       if (allModuleImageFailures.some((val) => val.allImageFailures.length !== 0)) {
         dispatch(addModules(allModuleImageFailures));
         setModuleList(allModuleImageFailures);
@@ -93,6 +97,19 @@ function Home() {
     return csvWriterValueArray;
   };
 
+  const onDownloadExcelClick = () => {
+    let sheetData = [];
+    for (let i = 0; i < allFailures.length; i++) {
+      for (let j = 0; j < allFailures[i].allFailures.length; j++) {
+        sheetData.push(allFailures[i].allFailures[j]);
+      }
+    }
+    var wb = XLSX.utils.book_new(),
+      ws = XLSX.utils.json_to_sheet(sheetData);
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
+    XLSX.writeFile(wb, "AllFailures.xlsx");
+  };
+
   function handleClick(item) {
     dispatch(addCurrentModule(item));
     navigate(`/module/${item.uid}`, { state: { item: item } });
@@ -117,11 +134,15 @@ function Home() {
             </div>
           ))}
         {showDownload && moduleList.length > 0 && (
-          <CSVLink data={onDownloadClick()} filename={"allureMapCSV.csv"} headers={headers} enclosingCharacter="">
-            Download CSV File
-          </CSVLink>
+          <div>
+            <CSVLink data={onDownloadClick()} filename={"allureMapCSV.csv"} headers={headers} enclosingCharacter="">
+              Download Image Failures CSV
+            </CSVLink>
+            <span className="downloadExcelStyle" onClick={onDownloadExcelClick}>
+              Download All Failures Excel
+            </span>
+          </div>
         )}
-        {/* <button onClick={onDownloadClick}>Download Allurecsv</button> */}
       </div>
     </div>
   );

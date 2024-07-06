@@ -1,8 +1,8 @@
 import axios from "axios";
-import React from "react";
 
 const prodURL = "https://image-compare-automation-server.vercel.app";
-const localURL = "http://localhost:5000";
+// const localURL = "http://localhost:5000";
+// const prodURL = "http://localhost:5000";
 
 export async function getAllModules(link) {
   const moduleData = await axios
