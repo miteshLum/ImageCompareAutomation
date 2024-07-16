@@ -100,10 +100,19 @@ function Home() {
   const onDownloadExcelClick = () => {
     let sheetData = [];
     for (let i = 0; i < allFailures.length; i++) {
-      for (let j = 0; j < allFailures[i].allFailures.length; j++) {
-        sheetData.push(allFailures[i].allFailures[j]);
+      const sortArr = JSON.parse(JSON.stringify(allFailures[i].allFailures));
+      sortArr.sort(function (a, b) {
+        var keyA = a.ScenarioName,
+          keyB = b.ScenarioName;
+        if (keyA < keyB) return -1;
+        if (keyA > keyB) return 1;
+        return 0;
+      });
+      for (let j = 0; j < sortArr.length; j++) {
+        sheetData.push(sortArr[j]);
       }
     }
+    console.log("Sheet Data => ", sheetData);
     var wb = XLSX.utils.book_new(),
       ws = XLSX.utils.json_to_sheet(sheetData);
     XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
